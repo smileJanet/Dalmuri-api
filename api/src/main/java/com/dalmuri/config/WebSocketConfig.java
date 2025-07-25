@@ -1,6 +1,6 @@
 package com.dalmuri.config;
 
-import com.dalmuri.socket.ChatHandler;
+import com.dalmuri.socket.MediachatHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -29,11 +29,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
         * implements = "기능을 설계도로 받아서 내가 직접 만든다" (부모가 메서드의 이름만 알려줌)
         *
         * */
-        registry.addHandler(new ChatHandler(), "/chat").setAllowedOrigins("*");
+        registry.addHandler(new MediachatHandler(), "/chat").setAllowedOrigins("*");
 
         /*
         * 1) addHandler : 웹소켓 핸들러 추가
-        * 2) new ChatHandler : ChatHandler(임의로 작성)라는 웹소켓 핸들러의 새로운 인스턴스를 생성. ChatHandler에 실제로 웹소켓 메시지를 주고받는 로직(=채팅 처리 로직)을 담고 있을 것이다.
+        * 2) new TextchatHandler : TextchatHandler(임의로 작성)라는 웹소켓 핸들러의 새로운 인스턴스를 생성. TextchatHandler에 실제로 웹소켓 메시지를 주고받는 로직(=채팅 처리 로직)을 담고 있을 것이다.
+        *   => MediachatHandler로 변경 : AbstractWebSocketHandler로, 텍스트와
         * 3) /chat : 클라이언트 측에서 웹소켓 연결을 요청할 "경로"를 지정. ex : ws://localhost:8080/chat과 같은 주소로 웹소켓 연결을 시도한다면 ChatHandler가 이를 처리할 것이다.
         * 4) setAllowedOrigins("*") : 교차 출처(Cross Origin)요청을 허용하는 설정. *는 모든 출처(origin)에서의 접근을 허용하겠다는 의미. 단 보안상 권장되지 않으며, 실제 운영에선 특정 도메인만 허용되도록 설정할 것
         *   ex: "http://localhost:3000", "https://yourdomain.com"
