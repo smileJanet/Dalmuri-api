@@ -32,3 +32,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+  ### Application config ###
+api/src/main/resources/application.yml
+api/src/main/resources/application.properties
+api/src/main/resources/config/
+api/src/main/resources/config/google-key/dalmuri-924ef5081310.json
