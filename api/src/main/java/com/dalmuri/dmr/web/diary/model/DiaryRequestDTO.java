@@ -7,9 +7,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaryResponseDTO {
+public class DiaryRequestDTO {
 
-    private float score;
-    private float magnitude;
-
+    private String text;
 }

@@ -1,15 +1,13 @@
 package com.dalmuri.dmr.web.diary.controller;
 
+import com.dalmuri.dmr.web.diary.model.DiaryRequestDTO;
 import com.dalmuri.dmr.web.diary.model.DiaryResponseDTO;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins="http://localhost:1003")
@@ -25,40 +23,40 @@ public class DiaryController {
     *
     * 2. 구글 애플리케이션 기본 사용자 인증 정보 설정 (ADC 방식을 통해)
     * 참고 사이트 : https://cloud.google.com/docs/authentication/application-default-credentials?hl=ko
+    * 웹사이트에서 json키를 발급 받고, 환경변수에서 환경 설정을 해준다. json키는 매우 민감한 키여서 git push가 거절되므로 프로젝트 외부에 심어준다.
     *
-    *
-    *
-    *
+    * 3. 환경변수 설정
+    * Run > Edit Configuration > Modify Options > Environment Variables에서 JSON키를 보관한 경로를 지정
     *
     * */
 
-    @GetMapping("/get-diary-score")
-    public ResponseEntity<DiaryResponseDTO> getDiaryScore() {
+    @PostMapping("/get-diary-score")
+    public ResponseEntity<DiaryResponseDTO> getDiaryScore(@RequestBody DiaryRequestDTO request) {
         DiaryResponseDTO response = new DiaryResponseDTO();
 
-        try (LanguageServiceClient language = LanguageServiceClient.create()) {
+//        try (LanguageServiceClient language = LanguageServiceClient.create()) {
+//
+//            String text = request.getText();
+//            Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
+//
+//            Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
+//
+//            response.setScore(sentiment.getScore());
+//            response.setMagnitude(sentiment.getMagnitude());
+//
+//            return ResponseEntity.ok(response);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println("Google Cloud API 호출 중 예외 발생: " + e.getMessage());
+//
+//            return ResponseEntity.badRequest().build();
+//        }
 
-            String text = "야 이거 한국어도 되냐? 끝내준다 기분 째지는데? ㅋㅋㅋㅋ";
-            Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
+        response.setScore(0.8f);
+        response.setMagnitude(0.8f);
 
-            Sentiment sentiment = language.analyzeSentiment(doc).getDocumentSentiment();
-
-            response.setSentiment(sentiment);
-            response.setScore(sentiment.getScore());
-            response.setMagnitude(sentiment.getMagnitude());
-
-            System.out.println("sentiment : " + sentiment);
-            System.out.println("sentiment.getScore() : " + sentiment.getScore());
-            System.out.println("sentiment.getMagnitude() : " + sentiment.getMagnitude());
-
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Google Cloud API 호출 중 예외 발생: " + e.getMessage());
-
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(response);
 
     }
 
