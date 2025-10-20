@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
+@Configuration // @Component를 사용해도 상관은 없지만, 설정과 관련된 파일임을 명시하기 위해 @Configuration을 사용하는게 관례이긴 하다.
 @ConfigurationProperties(prefix="security")
 public class ClientSecurityProperties {
 
@@ -29,20 +29,25 @@ public class ClientSecurityProperties {
     *
     * */
 
-
     /*
     * [필드부 Private Field]
     * 이 ClientSecurityProperties.java에서만 접근할 수 있는 List<String> 타입의 변수
     * application.yml 내 security.permit-urls 키에 해당하는 변수들을 받아서 사용하는 저장소 역할
-    * private로 선언된 이유: 캡슐화를 위해!
+    * private로 선언된 이유: 캡슐화를 위해! getter-setter로만 접근할 수 있도록 한다.
     *
     * */
     private List<String> permitUrls;
 
     /*
     * [기본 생성자]
-    * @ConfigurationProperties를 사용한 경우 기본 생성자를 자동으로 만들어줌
     * 기본 생성자의 형태 : public ClientSecurityProperties(){}
+    * 지금은 Java Compiler가 자동으로 기본 생성자를 만들어준 상태
+    * setter 방식 바인딩을 위해서라도 @ConfigurationProperties는 기본 생성자가 있어야 한다.
+    *
+    * +)
+    * [Java Compiler vs JVM]
+    * 1. Java Compiler : .java → .class 변환, 컴파일 시점에 실행
+    * 2. JVM : .class 실행, Run 시점에 실행
     *
     * */
 
@@ -60,7 +65,13 @@ public class ClientSecurityProperties {
     * 해당 필드에 대입하고자 하는 값을 전달받아 필드에 대입시켜주는 메소드
     * = 를 기준으로
     * this.permitUrls : 필드부의 private List<String< permitUrls를 의미
-    * = permitUrls : Run파일에서 받아온 매개변수 값
+    * = permitUrls : Spring boot가 application.yml을 파싱한 후 이 setter을 호출한다.
+    *
+    * 실행 흐름:
+    *   (1) Spring boot run
+    *   (2) application.yml 읽음
+    *   (3) security.permit-urls 발견
+    *   (4) setPermitUrls() 호출하여 자동으로 바인딩
     *
     * */
     public void setPermitUrls(List<String> permitUrls) {

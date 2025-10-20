@@ -6,6 +6,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Spring Security 보안 설정
+ * - 보안 필터 체인 구성
+ * - 인증 없이 접근 가능한 URL 설정
+ * - 모든 HTTP 요청에 대한 보안 검증 수행
+ * */
+
 /*
 * [@Configuration]
 * 해당 Java 파일이 'Spring 설정 클래스'임을 선언. Spring 컨테이너가 이 클래스를 스캔하여 @Bean으로 정의된 메소드를 실행하고 Bean을 생성함
@@ -20,17 +27,32 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     /*
+    * | 구분         | ClientSecurityProperties           | SecurityConfig |
+    * |-------------|------------------------------------|----------------|
+    * | **역할**     | 설정값 보관                         | 보안 규칙 적용 |
+    * | **비유**     | 그릇, 저장소                        | 규칙 설정자 |
+    * | **주요 작업** | YAML → Java 객체 변환              | 필터 체인 구성 |
+    * | **의존 관계** | 독립적                             | ClientSecurityProperties 필요 |
+    * | **변경 빈도** | 거의 없음                          | 보안 요구사항에 따라 변경 |
+    *
+    * */
+
+    /*
     * [의존성 주입 DI]
     *
     * 1. private final ClientSecurityProperties securityProperties
-    * 기존에 정의했던 ClientSecurityProperties Bean을 주입받음
-    * Spring Boot는 생성자 주입 방식을 사용하는데, 컨테이너는 ClientSecurityProperties 객체를 생성하고,
-    * 그 객체를 SecurityConfig에서 사용할 수 있도록 생성자 매개 변수로 전달
+    * 기존에 정의했던 ClientSecurityProperties Bean을 주입받을 필드 준비
+    * Spring Boot는 생성자 주입 방식을 사용하는데, 컨테이너는 ClientSecurityProperties Bean을 찾아서
+    * SecurityConfig 생성 시 생성자 매개변수로 ClientSecurityProperties를 자동 전달
     *
-    * 2. public SecurityConfig(){}
-    * 이 클래스에 대한 기본 생성자 생성
+    * 2. public SecurityConfig(ClientSecurityProperties securityProperties){}
+    * 매개변수(ClientSecurityProperties)가 있는 생성자
+    * 매개변수를 통해 ClientSecurityProperties를 주입받음(DI 실행)
+    * 기본 생성자 : 매개 변수가 없다. ex) public SecurityConfig() {}
     *
-    * 3. this.securityProperties : private final ~ 에서 선언한 securityProperties
+    * 3. this.securityProperties : private final ~ 에서 선언한 securityProperties,
+    * 여기서 this는 ClientSecurityProperties가 아닌 **SecurityConfig**
+    * 따라서 private final ClientSecurityProperties securityProperties;는 SecurityConfig의 필드부
     * = securityProperties : ClientSecurityProperties에서 받은 값들을 사용할 수 있도록 대입함
     *
     * */
