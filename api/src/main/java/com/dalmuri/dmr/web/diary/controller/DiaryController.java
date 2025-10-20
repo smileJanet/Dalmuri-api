@@ -106,40 +106,40 @@ public class DiaryController {
     public ResponseEntity<DiaryResponseDTO> getDiaryScore(@RequestBody DiaryRequestDTO request) {
         DiaryResponseDTO response = new DiaryResponseDTO();
 
-//        try (LanguageServiceClient language = LanguageServiceClient.create()) {
-//
-//            String text = request.getText();
-//            Document doc = Document.newBuilder()    // Google Cloud Natural Language API에 넘겨줄 Document 객체 생성
-//                    .setContent(text)               // 분석할 실제 텍스트 설정
-//                    .setType(Type.PLAIN_TEXT)       // 분석 대상이 일반 텍스트임을 지정
-//                    .build();                       // 최종 Document 객체 생성
-//
-//            Sentiment sentiment = language.analyzeSentiment(doc)    // Google Cloud에 감정 분석 요청을 보냄. 텍스트의 감정을 분석해서 점수를 메기고 반환
-//                    .getDocumentSentiment();                        // 문서 전체에 대한 평균 감정 점수(Sentiment)를 가져옴
-//
-//            /*
-//            * [구글에서 제공하는 감정 점수(Sentiment)의 범위]
-//            * 출처 : https://cloud.google.com/natural-language/docs/basics?hl=ko#interpreting_sentiment_analysis_values
-//            * 1) score : -1.0 → 매우 부정적, 0.0 → 중립, +1.0 → 매우 긍정적
-//            * 2) magnitude : 감정의 강도 (0.0 이상), 높을수록 감정의 강도가 큼 (기쁨, 분노, 슬픔 등 강렬한 감정 표현)
-//            * */
-//
-//            response.setScore(sentiment.getScore());
-//            response.setMagnitude(sentiment.getMagnitude());
-//
-//            return ResponseEntity.ok(response);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.err.println("Google Cloud API 호출 중 예외 발생: " + e.getMessage());
-//
-//            return ResponseEntity.badRequest().build();
-//        }
+        try (LanguageServiceClient language = LanguageServiceClient.create()) {
 
-        response.setScore(0.8f);
-        response.setMagnitude(0.8f);
+            String text = request.getText();
+            Document doc = Document.newBuilder()    // Google Cloud Natural Language API에 넘겨줄 Document 객체 생성
+                    .setContent(text)               // 분석할 실제 텍스트 설정
+                    .setType(Type.PLAIN_TEXT)       // 분석 대상이 일반 텍스트임을 지정
+                    .build();                       // 최종 Document 객체 생성
 
-        return ResponseEntity.ok(response);
+            Sentiment sentiment = language.analyzeSentiment(doc)    // Google Cloud에 감정 분석 요청을 보냄. 텍스트의 감정을 분석해서 점수를 메기고 반환
+                    .getDocumentSentiment();                        // 문서 전체에 대한 평균 감정 점수(Sentiment)를 가져옴
+
+            /*
+            * [구글에서 제공하는 감정 점수(Sentiment)의 범위]
+            * 출처 : https://cloud.google.com/natural-language/docs/basics?hl=ko#interpreting_sentiment_analysis_values
+            * 1) score : -1.0 → 매우 부정적, 0.0 → 중립, +1.0 → 매우 긍정적
+            * 2) magnitude : 감정의 강도 (0.0 이상), 높을수록 감정의 강도가 큼 (기쁨, 분노, 슬픔 등 강렬한 감정 표현)
+            * */
+
+            response.setScore(sentiment.getScore());
+            response.setMagnitude(sentiment.getMagnitude());
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Google Cloud API 호출 중 예외 발생: " + e.getMessage());
+
+            return ResponseEntity.badRequest().build();
+        }
+
+//        [TEST LOGIC]
+//        response.setScore(0.8f);
+//        response.setMagnitude(0.8f);
+//        return ResponseEntity.ok(response);
 
     }
 

@@ -1,0 +1,12 @@
+#[1]Security permit URLs
+security:
+  permit-urls:
+    - /chat/**
+    - /uploads/**
+    - /diary/**
+
+#[2] logging Settings
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
