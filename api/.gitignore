@@ -34,4 +34,5 @@ build/
 .vscode/
 
 ### Application config ###
-api/src/main/resources/config/
+**/application.yml
+**/application.properties
