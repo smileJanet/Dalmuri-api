@@ -63,8 +63,8 @@ public class DiaryService {
 //        }
 
 //        [TEST LOGIC]
-        response.setScore(0.8f);
-        response.setMagnitude(0.8f);
+        response.setScore(1.0f);
+        response.setMagnitude(0.2f);
         return ResponseEntity.ok(response);
 
     } // getDiaryScore
